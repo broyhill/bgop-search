@@ -620,7 +620,7 @@ body {
     <!-- Timeline bar -->
     <div class="timeline-bar">
       <span class="timeline-label">ECOSYSTEM TIMELINE</span>
-      <select id="ecoSelect" onchange="run()">
+      <select id="ecoSelect" onchange="onEcoSelectChange()">
         <option value="">— pick an ecosystem —</option>
       </select>
       <label class="include-toggle">
@@ -761,7 +761,11 @@ async function run() {
   if (state.ext)   p.set('ext', state.ext);
 
   const ecoVal = document.getElementById('ecoSelect').value || state.eco;
-  if (ecoVal)      p.set('eco', ecoVal);
+  if (ecoVal) {
+    p.set('eco', ecoVal);
+    const integrated = document.getElementById('inclIntegrated').checked;
+    p.set('mode', integrated ? 'integrated' : 'solo');
+  }
 
   // Lifecycle from cat mapping
   const life = catToLifecycle(state.cat);
@@ -970,6 +974,16 @@ function toggle40k() {
   run();
 }
 function setMode(m) { }  // bridge is the only mode for now
+
+function onEcoSelectChange() {
+  const val = document.getElementById('ecoSelect').value;
+  state.eco = val;
+  // Sync sidebar grid highlight
+  document.querySelectorAll('.eco-cell').forEach(c => {
+    c.classList.toggle('active', c.querySelector('.eco-id')?.textContent === val);
+  });
+  run();
+}
 
 function flipSort() {
   state.sort = state.sort === 'desc' ? 'asc' : 'desc';
