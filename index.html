@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BROYHILLGOP GOD FILE V9</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bg: #111318;
+  --surface: #1a1d26;
+  --surface2: #21263a;
+  --border: #2c3050;
+  --ink: #d8ddf0;
+  --dim: #6b728f;
+  --accent: #4a7cdc;
+  --green: #22c55e;
+  --red: #ef4444;
+  --yellow: #eab308;
+  --orange: #f97316;
+  --teal: #14b8a6;
+  --mono: 'SF Mono', ui-monospace, Menlo, monospace;
+  --header-h: 96px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font: 13px/1.5 -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ══════════ TOP BAR ══════════ */
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+
+/* Mode pills */
+.mode-group { display: flex; gap: 6px; }
+.mode-btn {
+  font-size: 12px; font-weight: 600;
+  padding: 5px 11px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--dim);
+  cursor: pointer;
+  transition: all .12s;
+  white-space: nowrap;
+}
+.mode-btn:hover { color: var(--ink); border-color: #4a7cdc66; }
+.mode-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.mode-btn.last3 { background: #1e3a5f; border-color: #2a5090; color: #7eb3ff; }
+.mode-btn.last3.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.mode-btn.ecosolo { background: #0f2d1f; border-color: #1a5c36; color: #4ade80; }
+.mode-btn.ecosolo.active { background: #16a34a; border-color: #16a34a; color: #fff; }
+.mode-btn.view40k { background: #1a1060; border-color: #3730a3; color: #a5b4fc; }
+.mode-btn.view40k.active { background: #6366f1; border-color: #6366f1; color: #fff; }
+
+/* Search input */
+.search-wrap {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+#q {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--ink);
+  font-size: 14px;
+  padding: 7px 12px;
+  outline: none;
+  transition: border-color .15s;
+}
+#q:focus { border-color: var(--accent); }
+#q::placeholder { color: var(--dim); }
+
+.search-btn {
+  background: var(--accent);
+  border: none;
+  border-radius: 7px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 18px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.search-btn:hover { opacity: .88; }
+
+.fts-badge {
+  font-size: 11px; font-weight: 700;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 9px;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+/* ══════════ STATUS BAR ══════════ */
+.statusbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 5px 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+}
+.app-title {
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.app-title .bolt { color: var(--yellow); }
+.relay-dot {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11.5px; color: var(--dim);
+}
+.relay-dot .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--red);
+}
+.relay-dot .dot.on { background: var(--green); }
+.relay-pill {
+  font-size: 11px; font-weight: 600;
+  padding: 2px 8px; border-radius: 20px;
+  border: 1px solid var(--green);
+  color: var(--green);
+}
+.build-info { color: var(--dim); font-size: 11.5px; margin-left: auto; }
+
+/* ══════════ LAYOUT ══════════ */
+.app-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ══════════ SIDEBAR ══════════ */
+.sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  padding: 12px 10px;
+  overflow-y: auto;
+  background: var(--surface);
+}
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); }
+
+.filter-section { margin-bottom: 14px; }
+.filter-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .09em;
+  color: var(--dim);
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 6px;
+  cursor: pointer; user-select: none;
+}
+.filter-label .arrow { font-size: 9px; color: var(--dim); }
+
+/* Category pills */
+.pill-grid { display: flex; flex-wrap: wrap; gap: 4px; }
+.pill {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--dim);
+  cursor: pointer;
+  transition: all .1s;
+  user-select: none;
+}
+.pill:hover { border-color: #4a7cdc66; color: var(--ink); }
+.pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.pill.all-pill { background: var(--accent); border-color: var(--accent); color: #fff; }
+.pill.all-pill:not(.active) { background: var(--surface2); border-color: var(--border); color: var(--dim); }
+
+/* File type pills */
+.ft-pill {
+  font-size: 10.5px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--dim);
+  cursor: pointer;
+  font-family: var(--mono);
+  transition: all .1s;
+  user-select: none;
+}
+.ft-pill:hover { border-color: #4a7cdc66; color: var(--ink); }
+.ft-pill.active { background: #1e3048; border-color: var(--accent); color: #7eb3ff; }
+
+/* Date range */
+.date-inputs { display: flex; flex-direction: column; gap: 6px; }
+.date-row { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--dim); }
+.date-row input[type=date] {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--ink);
+  font-size: 11px;
+  padding: 4px 6px;
+  outline: none;
+}
+
+/* Ecosystem grid */
+.eco-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.eco-cell {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 6px;
+  cursor: pointer;
+  transition: all .1s;
+  user-select: none;
+}
+.eco-cell:hover { border-color: #4a7cdc66; }
+.eco-cell.active { border-color: var(--accent); background: #1a2a48; }
+.eco-id { font-size: 10px; font-weight: 700; color: var(--accent); }
+.eco-name { font-size: 10px; color: var(--dim); line-height: 1.3; margin-top: 1px; }
+
+/* Flags */
+.flag-item {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11.5px; color: var(--dim);
+  padding: 3px 0;
+  cursor: pointer;
+  user-select: none;
+}
+.flag-item input[type=checkbox] { accent-color: var(--accent); }
+.flag-item:hover { color: var(--ink); }
+
+.clear-btn {
+  width: 100%;
+  font-size: 11.5px;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--dim);
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all .1s;
+}
+.clear-btn:hover { border-color: var(--red); color: var(--red); }
+
+/* ══════════ MAIN CONTENT ══════════ */
+.main-content { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow-y: auto; }
+
+/* Timeline bar */
+.timeline-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.timeline-label {
+  font-size: 11.5px; font-weight: 700;
+  color: var(--teal);
+  display: flex; align-items: center; gap: 6px;
+}
+.timeline-label::before { content: '📋'; font-size: 12px; }
+#ecoSelect {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--ink);
+  font-size: 12px;
+  padding: 4px 8px;
+  outline: none;
+}
+.include-toggle {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11.5px; color: var(--dim);
+  cursor: pointer;
+}
+.include-toggle input { accent-color: var(--accent); }
+.reset-btn {
+  font-size: 11.5px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--dim);
+  cursor: pointer;
+}
+.reset-btn:hover { color: var(--ink); }
+.sort-btn {
+  font-size: 11.5px; font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--dim);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .12s;
+  display: flex; align-items: center; gap: 5px;
+}
+.sort-btn:hover { border-color: var(--accent); color: var(--ink); }
+.sort-btn.asc { border-color: #3730a3; background: #1a1060; color: #a5b4fc; }
+.sort-btn .sort-arrow { font-size: 13px; line-height: 1; }
+#resultStatus {
+  font-size: 11.5px; color: var(--dim);
+  margin-left: auto;
+}
+
+/* ══════════ RESULTS ══════════ */
+.results-wrap { flex: 1; padding: 10px 14px; }
+
+.result-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  transition: border-color .12s;
+}
+.result-card:hover { border-color: #4a7cdc55; }
+
+/* Snippet row */
+.card-snippet {
+  background: var(--surface2);
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--dim);
+  line-height: 1.5;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+}
+.card-snippet b { color: var(--ink); background: rgba(74,124,220,.18); padding: 0 2px; border-radius: 2px; }
+
+/* Card body */
+.card-body { padding: 10px 12px; }
+.card-title-row {
+  display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px;
+}
+.card-name {
+  font-weight: 700; font-size: 14px;
+  color: var(--ink); cursor: pointer;
+  word-break: break-word;
+  flex: 1;
+}
+.card-name:hover { color: var(--accent); }
+.card-ext {
+  font-size: 11px; font-weight: 700;
+  font-family: var(--mono);
+  color: #a78bfa;
+  flex-shrink: 0;
+}
+.card-date {
+  font-size: 11.5px; color: var(--dim);
+  flex-shrink: 0; white-space: nowrap;
+}
+
+/* Size + type */
+.card-meta-row {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11.5px; color: var(--dim);
+  margin-bottom: 6px;
+}
+.card-size { }
+.card-type-badge {
+  font-size: 10.5px; font-weight: 600;
+  padding: 1px 6px; border-radius: 4px;
+  background: #1e2a40; border: 1px solid #2a3f60;
+  color: #7eb3ff;
+}
+
+/* Eco chips */
+.eco-chips { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px; }
+.eco-chip {
+  font-size: 10.5px; font-weight: 700;
+  padding: 2px 7px; border-radius: 4px;
+  cursor: pointer;
+}
+.eco-chip-0 { background: #1f2d4a; color: #60a5fa; border: 1px solid #2a4a80; }
+.eco-chip-1 { background: #1a3028; color: #4ade80; border: 1px solid #1a5c36; }
+.eco-chip-2 { background: #2d1f3a; color: #c084fc; border: 1px solid #5b2d8c; }
+.eco-chip-3 { background: #3a2d1f; color: #fb923c; border: 1px solid #8c5b2d; }
+.eco-chip-4 { background: #1f3a30; color: #2dd4bf; border: 1px solid #1a6b5a; }
+
+/* Tag pills */
+.tag-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.tag-pill {
+  font-size: 10.5px;
+  padding: 2px 7px; border-radius: 4px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--dim);
+}
+
+/* Actions row */
+.card-actions {
+  display: flex; gap: 6px;
+  margin-top: 8px; padding-top: 8px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.card-path-text {
+  font-size: 10.5px; color: var(--dim);
+  font-family: var(--mono);
+  word-break: break-all;
+  margin-top: 4px;
+}
+.action-btn {
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all .1s;
+}
+.action-btn:hover { border-color: var(--accent); color: var(--accent); }
+.copy-ok { color: var(--green) !important; border-color: var(--green) !important; }
+
+/* ══════════ DOC VIEWER ══════════ */
+.doc-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.72);
+  z-index: 500;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 28px 16px;
+  backdrop-filter: blur(3px);
+}
+.doc-overlay.hidden { display: none; }
+.doc-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: 100%; max-width: 940px;
+  max-height: calc(100vh - 56px);
+  display: flex; flex-direction: column;
+  box-shadow: 0 32px 80px rgba(0,0,0,.6);
+}
+.doc-hdr {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.doc-hdr-inner { flex: 1; min-width: 0; }
+.doc-hdr-title { font-weight: 700; font-size: 16px; word-break: break-word; }
+.doc-hdr-meta { font-size: 11.5px; color: var(--dim); margin-top: 4px; }
+.doc-body { flex: 1; overflow-y: auto; padding: 16px 18px; }
+.doc-body::-webkit-scrollbar { width: 4px; }
+.doc-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.doc-abstract {
+  font-size: 13px; color: #b0bce8; line-height: 1.6;
+  background: var(--surface2); border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 10px 14px; margin-bottom: 14px;
+}
+.doc-content {
+  font-size: 12.5px; line-height: 1.65; color: #b8c4e0;
+  white-space: pre-wrap; word-break: break-word;
+  font-family: var(--mono);
+  background: var(--bg); padding: 14px;
+  border-radius: 8px; border: 1px solid var(--border);
+}
+
+/* ══════════ MISC ══════════ */
+.spinner {
+  display: inline-block; width: 12px; height: 12px;
+  border: 2px solid var(--border); border-top-color: var(--accent);
+  border-radius: 50%; animation: spin .6s linear infinite;
+  vertical-align: middle; margin-right: 5px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.empty { text-align: center; padding: 48px 20px; color: var(--dim); }
+.empty h3 { font-size: 15px; color: var(--ink); margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<!-- ══ TOP BAR ══ -->
+<div class="topbar">
+  <div class="mode-group">
+    <button class="mode-btn active" id="btnBridge" onclick="setMode('bridge')">BRIDGE</button>
+    <button class="mode-btn last3" id="btnLast3" onclick="toggleLast3()">⚡ LAST 3 DAYS</button>
+    <button class="mode-btn ecosolo" id="btnEcoSolo" onclick="toggleEcoSolo()">◉ ECO SOLO</button>
+    <button class="mode-btn view40k" id="btn40k" onclick="toggle40k()">🌐 40,000-FT VIEW</button>
+  </div>
+  <div class="search-wrap">
+    <input id="q" type="text" placeholder="Search documents…" onkeydown="if(event.key==='Enter') run()">
+    <button class="search-btn" onclick="run()">Search</button>
+    <span class="fts-badge" id="ftsBadge">FTS 100</span>
+  </div>
+</div>
+
+<!-- ══ STATUS BAR ══ -->
+<div class="statusbar">
+  <div class="app-title">
+    <span class="bolt">⚡</span> BROYHILLGOP GOD FILE V9
+  </div>
+  <div class="relay-dot">
+    <span class="dot" id="relayDot"></span>
+    <span id="relayLabel">RELAY OFFLINE</span>
+  </div>
+  <span class="relay-pill" id="bridgePill">BRIDGE ONLINE</span>
+  <span class="build-info" id="buildInfo">loading…</span>
+</div>
+
+<!-- ══ APP BODY ══ -->
+<div class="app-body">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="filter-section">
+      <div class="filter-label" onclick="toggleSection('catSection')">
+        CATEGORY <span class="arrow">▼</span>
+      </div>
+      <div id="catSection" class="pill-grid">
+        <span class="pill all-pill active" onclick="setCat('')">All</span>
+        <span class="pill" onclick="setCat('api')">api</span>
+        <span class="pill" onclick="setCat('config')">config</span>
+        <span class="pill" onclick="setCat('data')">data</span>
+        <span class="pill" onclick="setCat('doc')">doc</span>
+        <span class="pill" onclick="setCat('frontend')">frontend</span>
+        <span class="pill" onclick="setCat('legal')">legal</span>
+        <span class="pill" onclick="setCat('migration')">migration</span>
+        <span class="pill" onclick="setCat('schema')">schema</span>
+        <span class="pill" onclick="setCat('session')">session</span>
+        <span class="pill" onclick="setCat('test')">test</span>
+        <span class="pill" onclick="setCat('vendor')">vendor</span>
+        <span class="pill" onclick="setCat('worker')">worker</span>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label" onclick="toggleSection('ftSection')">
+        FILE TYPE <span class="arrow">▼</span>
+      </div>
+      <div id="ftSection" class="pill-grid">
+        <span class="pill all-pill active" onclick="setExt('')">All</span>
+        <span class="ft-pill" onclick="setExt('.csv')">.csv</span>
+        <span class="ft-pill" onclick="setExt('.docx')">.docx</span>
+        <span class="ft-pill" onclick="setExt('.html')">.html</span>
+        <span class="ft-pill" onclick="setExt('.js')">.js</span>
+        <span class="ft-pill" onclick="setExt('.json')">.json</span>
+        <span class="ft-pill" onclick="setExt('.md')">.md</span>
+        <span class="ft-pill" onclick="setExt('.mdc')">.mdc</span>
+        <span class="ft-pill" onclick="setExt('.pdf')">.pdf</span>
+        <span class="ft-pill" onclick="setExt('.py')">.py</span>
+        <span class="ft-pill" onclick="setExt('.sh')">.sh</span>
+        <span class="ft-pill" onclick="setExt('.sql')">.sql</span>
+        <span class="ft-pill" onclick="setExt('.toml')">.toml</span>
+        <span class="ft-pill" onclick="setExt('.ts')">.ts</span>
+        <span class="ft-pill" onclick="setExt('.txt')">.txt</span>
+        <span class="ft-pill" onclick="setExt('.xlsx')">.xlsx</span>
+        <span class="ft-pill" onclick="setExt('.yaml')">.yaml</span>
+        <span class="ft-pill" onclick="setExt('.yml')">.yml</span>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label" onclick="toggleSection('dateSection')">
+        DATE RANGE <span class="arrow">▼</span>
+      </div>
+      <div id="dateSection" class="date-inputs">
+        <div class="date-row">from <input type="date" id="dateFrom" onchange="run()"></div>
+        <div class="date-row">to&nbsp;&nbsp;<input type="date"  id="dateTo"   onchange="run()"></div>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label" onclick="toggleSection('ecoSection')">
+        ECOSYSTEM <span class="arrow">▼</span>
+      </div>
+      <div id="ecoSection" class="eco-grid" id="ecoGrid"></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label" onclick="toggleSection('flagSection')">
+        FLAGS <span class="arrow">▼</span>
+      </div>
+      <div id="flagSection">
+        <label class="flag-item">
+          <input type="checkbox" id="flagLatest" onchange="run()"> Latest version only
+        </label>
+        <label class="flag-item">
+          <input type="checkbox" id="flagSession" onchange="run()"> Session/transcript files
+        </label>
+        <label class="flag-item">
+          <input type="checkbox" id="flagEcoRef" onchange="run()"> Has ecosystem ref
+        </label>
+      </div>
+    </div>
+
+    <button class="clear-btn" onclick="clearAll()">✕ Clear all filters</button>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-content">
+
+    <!-- Timeline bar -->
+    <div class="timeline-bar">
+      <span class="timeline-label">ECOSYSTEM TIMELINE</span>
+      <select id="ecoSelect" onchange="run()">
+        <option value="">— pick an ecosystem —</option>
+      </select>
+      <label class="include-toggle">
+        <input type="checkbox" id="inclIntegrated" onchange="run()"> include integrated ecosystems
+      </label>
+      <button class="reset-btn" onclick="clearAll()">reset</button>
+      <button class="sort-btn" id="sortBtn" onclick="flipSort()" title="Toggle sort order">
+        <span class="sort-arrow" id="sortArrow">↓</span>
+        <span id="sortLabel">newest first</span>
+      </button>
+      <span id="resultStatus"></span>
+    </div>
+
+    <!-- Results -->
+    <div class="results-wrap" id="out"></div>
+  </div>
+</div>
+
+<!-- DOC VIEWER -->
+<div id="docOverlay" class="doc-overlay hidden" onclick="overlayClick(event)">
+  <div class="doc-panel">
+    <div class="doc-hdr">
+      <div class="doc-hdr-inner">
+        <div class="doc-hdr-title" id="docTitle"></div>
+        <div class="doc-hdr-meta"  id="docMeta"></div>
+        <div class="eco-chips"     id="docChips" style="margin-top:8px"></div>
+      </div>
+      <button class="action-btn" onclick="closeDoc()">✕ Close</button>
+    </div>
+    <div class="doc-body">
+      <div class="doc-abstract" id="docAbstract" style="display:none"></div>
+      <div class="doc-content"  id="docContent">Loading…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Config ─────────────────────────────────────────
+const API  = 'http://144.76.219.24/library/v2';
+const HDRS = { 'x-api-key': 'ff233e75bac4e033d9321a844cb44c6a0a350db44ffcd5b3' };
+
+// ── State ──────────────────────────────────────────
+let state = {
+  q: '', ext: '', eco: '', cat: '', lifecycle: '',
+  dateFrom: '', dateTo: '',
+  last3: false, ecoSolo: false, view40k: false,
+  latest: false, session: false, ecoRef: false,
+  limit: 100, sort: 'desc'
+};
+let _abort = null;
+let _pathsCache = {};
+
+// ── Ecosystem label map (from E84 known names) ─────
+const ECO_NAMES = {
+  E00:'DataHub/Master DB', E01:'Donor Intelligence', E02:'Donation Processin',
+  E03:'Candidate Profiles', E04:'Activist Network', E05:'Volunteer Mgmt',
+  E06:'Analytics Engine', E07:'Issue Tracking', E08:'Communications Lib',
+  E09:'Content Creation A', E10:'Compliance Manager', E11:'Budget/Training',
+  E12:'Campaign', E13:'AI Hub', E14:'', E15:'', E16:'', E17:'Phone',
+  E18:'', E19:'Social Intelligence', E20:'Brain/E20', E30:'Email',
+  E31:'SMS', E32:'Mail', E33:'Social Video', E51:'Nexus/Orchestration',
+  E64:'Closer/SuperFunnel', E68:'Wizard of Oz', E84:'Doc Library'
+};
+
+// ── Boot ───────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', async () => {
+  await Promise.all([loadHealth(), loadFacets()]);
+  run();
+});
+
+// ── Health ─────────────────────────────────────────
+async function loadHealth() {
+  try {
+    const h = await apiFetch('/health');
+    document.getElementById('relayDot').className = 'dot';       // relay stays offline (no :8080)
+    document.getElementById('relayLabel').textContent = 'RELAY OFFLINE';
+    document.getElementById('bridgePill').textContent = 'BRIDGE ONLINE';
+    document.getElementById('buildInfo').textContent =
+      `${(h.files||0).toLocaleString()} / ${(h.build?.indexed_document_count||0).toLocaleString()} files · built ${(h.build?.index_built_at||'').slice(0,16).replace('T',' ')}`;
+    document.getElementById('ftsBadge').textContent = 'FTS ' + (h.build?.fts_document_count||0);
+  } catch(e) {
+    document.getElementById('buildInfo').textContent = 'library unreachable';
+  }
+}
+
+// ── Facets ─────────────────────────────────────────
+async function loadFacets() {
+  try {
+    const f = await apiFetch('/facets');
+    buildEcoGrid(f.ecosystems || {});
+    buildEcoSelect(f.ecosystems || {});
+  } catch(e) {}
+}
+
+function buildEcoGrid(ecos) {
+  const grid = document.getElementById('ecoSection');
+  // Show top 20 by count
+  const sorted = Object.entries(ecos).sort((a,b) => b[1]-a[1]).slice(0,20);
+  sorted.forEach(([id, n]) => {
+    const cell = document.createElement('div');
+    cell.className = 'eco-cell';
+    cell.innerHTML = `<div class="eco-id">${x(id)}</div><div class="eco-name">${x(ECO_NAMES[id]||'')}</div>`;
+    cell.onclick = () => {
+      const was = state.eco === id;
+      document.querySelectorAll('.eco-cell').forEach(c => c.classList.remove('active'));
+      state.eco = was ? '' : id;
+      if (!was) cell.classList.add('active');
+      document.getElementById('ecoSelect').value = state.eco;
+      run();
+    };
+    grid.appendChild(cell);
+  });
+}
+
+function buildEcoSelect(ecos) {
+  const sel = document.getElementById('ecoSelect');
+  Object.entries(ecos).sort((a,b) => b[1]-a[1]).forEach(([id, n]) => {
+    const o = document.createElement('option');
+    o.value = id;
+    o.textContent = `${id} — ${ECO_NAMES[id]||''} (${n})`;
+    sel.appendChild(o);
+  });
+}
+
+// ── Search ─────────────────────────────────────────
+async function run() {
+  if (_abort) _abort.abort();
+  _abort = new AbortController();
+
+  const out    = document.getElementById('out');
+  const status = document.getElementById('resultStatus');
+  status.innerHTML = '<span class="spinner"></span>';
+  out.innerHTML = '';
+
+  const p = new URLSearchParams();
+  const q = document.getElementById('q').value.trim();
+  if (q)           p.set('q', q);
+  if (state.ext)   p.set('ext', state.ext);
+
+  const ecoVal = document.getElementById('ecoSelect').value || state.eco;
+  if (ecoVal)      p.set('eco', ecoVal);
+
+  // Lifecycle from cat mapping
+  const life = catToLifecycle(state.cat);
+  if (life)        p.set('lifecycle', life);
+
+  if (state.last3) p.set('begin', daysAgo(3));
+  const df = document.getElementById('dateFrom').value;
+  const dt = document.getElementById('dateTo').value;
+  if (df) p.set('begin', df);
+  if (dt) p.set('end',   dt);
+
+  if (document.getElementById('flagLatest').checked)  p.set('lifecycle', 'applied');
+  if (document.getElementById('flagSession').checked) p.set('lifecycle', 'transcript');
+  if (document.getElementById('flagEcoRef').checked)  p.set('orphan', 'false');
+
+  p.set('sort',  state.sort);
+  p.set('limit', state.limit);
+
+  try {
+    const data = await apiFetch('/search?' + p, _abort.signal);
+    const results = data.results || [];
+    status.textContent = `${(data.count ?? results.length)} / ${(data.total ?? results.length)} files · built ${new Date().toISOString().slice(0,10)}`;
+
+    if (!results.length) {
+      out.innerHTML = `<div class="empty"><h3>No results</h3><p>Try different terms or clear a filter.</p></div>`;
+      return;
+    }
+    out.innerHTML = results.map(renderCard).join('');
+  } catch(e) {
+    if (e.name === 'AbortError') return;
+    status.textContent = '⚠ ' + e.message;
+  }
+}
+
+function catToLifecycle(cat) {
+  const map = { test:'test', session:'transcript', migration:'dryrun', legal:'ruling' };
+  return map[cat] || '';
+}
+
+// ── Card ───────────────────────────────────────────
+function renderCard(r) {
+  const name    = r.name || r.path?.split('/').pop() || '(untitled)';
+  const hash    = r.hash || '';
+  const ext     = r.ext  || '';
+  const sizeStr = r.size ? fmtSize(r.size) : '';
+  const typeStr = guessType(r);
+  const dateStr = r.time ? fmtDate(r.time) : '';
+  const path    = r.path || '';
+  const ecos    = r.ecosystems || (r.primary_eco ? [r.primary_eco] : []);
+  const tags    = r.tags || [];
+
+  const ecoChips = ecos.map((e, i) =>
+    `<span class="eco-chip eco-chip-${i%5}" onclick="filterEco('${x(e)}')">${x(e)}</span>`
+  ).join('');
+
+  const tagPills = tags.map(t => `<span class="tag-pill">${x(t)}</span>`).join('');
+
+  const snippet = r.snippet
+    ? `<div class="card-snippet">${r.snippet}</div>`
+    : (r.preview ? `<div class="card-snippet">${x(r.preview)}</div>` : '');
+
+  const abstract = r.abstract
+    ? `<div style="font-size:12px;color:#909bc0;margin-bottom:6px;line-height:1.5">${x(r.abstract)}</div>`
+    : '';
+
+  return `<div class="result-card">
+  ${snippet}
+  <div class="card-body">
+    <div class="card-title-row">
+      <span class="card-name" onclick="openDoc('${hash}','${x(name)}')">${x(name)}</span>
+      <span class="card-ext">${x(ext)}</span>
+      <span class="card-date">${dateStr}</span>
+    </div>
+    <div class="card-meta-row">
+      ${sizeStr ? `<span class="card-size">${sizeStr}</span>` : ''}
+      ${typeStr ? `<span class="card-type-badge">${x(typeStr)}</span>` : ''}
+    </div>
+    ${ecoChips ? `<div class="eco-chips">${ecoChips}</div>` : ''}
+    ${abstract}
+    ${tagPills ? `<div class="tag-row">${tagPills}</div>` : ''}
+    <div class="card-actions">
+      <button class="action-btn" onclick="openDoc('${hash}','${x(name)}')">Open</button>
+      <button class="action-btn" onclick="revealPath('${x(path)}',this)">Reveal</button>
+      <button class="action-btn" onclick="copyPath('${x(path)}',this)">Copy path</button>
+    </div>
+    <div class="card-path-text">${x(path)}</div>
+  </div>
+</div>`;
+}
+
+function guessType(r) {
+  const lc = (r.lifecycle||[]).join(',');
+  if (lc.includes('applied'))    return 'applied';
+  if (lc.includes('dryrun'))     return 'dryrun';
+  if (lc.includes('spec'))       return 'spec';
+  if (lc.includes('ruling'))     return 'ruling';
+  if (lc.includes('transcript')) return 'transcript';
+  if (lc.includes('orphan'))     return 'orphan';
+  if (lc.includes('recovered'))  return 'recovered';
+  const ext = (r.ext||'').toLowerCase();
+  if (ext==='.sql') return 'sql';
+  if (ext==='.md')  return 'doc';
+  if (ext==='.py')  return 'python';
+  if (ext==='.html') return 'html';
+  return '';
+}
+
+// ── Actions ────────────────────────────────────────
+function copyPath(path, btn) {
+  navigator.clipboard.writeText(path).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copy-ok');
+    setTimeout(() => { btn.textContent = 'Copy path'; btn.classList.remove('copy-ok'); }, 1500);
+  });
+}
+function revealPath(path, btn) {
+  // Can't open Finder from browser; show the path prominently
+  btn.textContent = 'Path shown ↓';
+  setTimeout(() => { btn.textContent = 'Reveal'; }, 2000);
+}
+
+function filterEco(eco) {
+  state.eco = eco;
+  document.getElementById('ecoSelect').value = eco;
+  document.querySelectorAll('.eco-cell').forEach(c => {
+    c.classList.toggle('active', c.querySelector('.eco-id')?.textContent === eco);
+  });
+  run();
+}
+
+// ── Doc viewer ─────────────────────────────────────
+async function openDoc(hash, title) {
+  const overlay = document.getElementById('docOverlay');
+  document.getElementById('docTitle').textContent   = title;
+  document.getElementById('docMeta').textContent    = '';
+  document.getElementById('docChips').innerHTML     = '';
+  document.getElementById('docAbstract').style.display = 'none';
+  document.getElementById('docContent').textContent = 'Loading…';
+  overlay.classList.remove('hidden');
+
+  try {
+    const [outline, file] = await Promise.all([
+      apiFetch('/outline?hash=' + encodeURIComponent(hash)),
+      apiFetch('/file?hash='    + encodeURIComponent(hash))
+    ]);
+    const meta = outline.meta || {};
+    const abs  = outline.abstract || meta.abstract || '';
+    if (abs) {
+      document.getElementById('docAbstract').textContent  = abs;
+      document.getElementById('docAbstract').style.display = '';
+    }
+    const parts = [];
+    if (meta.primary_eco) parts.push(meta.primary_eco);
+    if (meta.time)        parts.push(fmtDate(meta.time));
+    if (meta.size)        parts.push(fmtSize(meta.size));
+    document.getElementById('docMeta').textContent = parts.join(' · ');
+
+    const ecos = meta.ecosystems || [];
+    document.getElementById('docChips').innerHTML =
+      ecos.map((e,i) => `<span class="eco-chip eco-chip-${i%5}">${x(e)}</span>`).join('');
+
+    document.getElementById('docContent').textContent = file.body || '(empty)';
+  } catch(e) {
+    document.getElementById('docContent').textContent = '⚠ ' + e.message;
+  }
+}
+function overlayClick(e) { if (e.target===document.getElementById('docOverlay')) closeDoc(); }
+function closeDoc() { document.getElementById('docOverlay').classList.add('hidden'); }
+
+// ── Filter controls ────────────────────────────────
+function setCat(cat) {
+  state.cat = cat;
+  document.querySelectorAll('#catSection .pill').forEach(p => {
+    const v = p.onclick?.toString().match(/'([^']*)'/) ? p.getAttribute('onclick').match(/'([^']*)'/)?.[1] : '';
+    p.classList.toggle('active', v === cat);
+    p.classList.toggle('all-pill', v === cat && cat === '');
+  });
+  run();
+}
+
+function setExt(ext) {
+  state.ext = ext;
+  document.querySelectorAll('#ftSection .ft-pill').forEach(p => {
+    const v = p.getAttribute('onclick')?.match(/'([^']*)'/)?.[1] || '';
+    p.classList.toggle('active', v === ext);
+  });
+  document.querySelectorAll('#ftSection .all-pill').forEach(p => {
+    p.classList.toggle('active', ext === '');
+  });
+  run();
+}
+
+function toggleLast3() {
+  state.last3 = !state.last3;
+  document.getElementById('btnLast3').classList.toggle('active', state.last3);
+  run();
+}
+function toggleEcoSolo() {
+  state.ecoSolo = !state.ecoSolo;
+  document.getElementById('btnEcoSolo').classList.toggle('active', state.ecoSolo);
+  run();
+}
+function toggle40k() {
+  state.view40k = !state.view40k;
+  document.getElementById('btn40k').classList.toggle('active', state.view40k);
+  run();
+}
+function setMode(m) { }  // bridge is the only mode for now
+
+function flipSort() {
+  state.sort = state.sort === 'desc' ? 'asc' : 'desc';
+  const isAsc = state.sort === 'asc';
+  const btn   = document.getElementById('sortBtn');
+  document.getElementById('sortArrow').textContent = isAsc ? '↑' : '↓';
+  document.getElementById('sortLabel').textContent  = isAsc ? 'oldest first' : 'newest first';
+  btn.classList.toggle('asc', isAsc);
+  run();
+}
+
+function toggleSection(id) {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === 'none' ? '' : '';
+}
+
+function clearAll() {
+  state = { ...state, ext:'', eco:'', cat:'', lifecycle:'', dateFrom:'', dateTo:'', last3:false };
+  document.getElementById('dateFrom').value = '';
+  document.getElementById('dateTo').value   = '';
+  document.getElementById('ecoSelect').value = '';
+  document.getElementById('flagLatest').checked  = false;
+  document.getElementById('flagSession').checked = false;
+  document.getElementById('flagEcoRef').checked  = false;
+  document.querySelectorAll('.eco-cell').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  document.querySelector('#catSection .all-pill').classList.add('active');
+  document.querySelectorAll('.ft-pill').forEach(p => p.classList.remove('active'));
+  document.querySelector('#ftSection .all-pill').classList.add('active');
+  document.getElementById('btnLast3').classList.remove('active');
+  run();
+}
+
+// ── Utils ──────────────────────────────────────────
+async function apiFetch(path, signal) {
+  const opts = { headers: HDRS };
+  if (signal) opts.signal = signal;
+  const r = await fetch(API + path, opts);
+  if (!r.ok) throw new Error(r.status + ' ' + path);
+  return r.json();
+}
+function x(s) {
+  return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmtSize(n) {
+  if (n>1048576) return (n/1048576).toFixed(1)+' MB';
+  if (n>1024)    return Math.round(n/1024)+' KB';
+  return n+' B';
+}
+function fmtDate(s) {
+  if (!s) return '';
+  return new Date(s).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+}
+function daysAgo(n) {
+  const d = new Date(); d.setDate(d.getDate()-n);
+  return d.toISOString().slice(0,10);
+}
+</script>
+</body>
+</html>
